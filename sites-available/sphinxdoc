@@ -1,0 +1,21 @@
+# DEV NOTE WITH SPHINX
+# ============================
+
+server {
+    listen 8083;
+    server_name 127.0.0.1 192.168.0.10;
+    root /home/pi/sphinxtest/doc/_build/html;
+    
+    location / { 
+	allow all;
+    }
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_pass php-handler;
+    }
+
+}
