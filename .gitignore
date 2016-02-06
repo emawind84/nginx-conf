@@ -2,3 +2,4 @@
 .htpasswd
 ssl/
 html/
+*.save
