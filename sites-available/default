@@ -1,7 +1,7 @@
 upstream php-handler {
 
-    server 127.0.0.1:9000;
-    #server unix:/var/run/php5-fpm.sock;
+    #server 127.0.0.1:9000;
+    server unix:/var/run/php5-fpm.sock;
 }
 
 ssl_certificate /etc/nginx/ssl/cert.pem;
@@ -56,6 +56,8 @@ server {
     listen 80;
     server_name raspi.emawind.com www.raspi.emawind.com;
 
+    include includes/do_not_log.conf;
+
     location /senseviewer/ {
         proxy_set_header Host $host;
         proxy_pass http://127.0.0.1:8088/;
@@ -84,8 +86,10 @@ server {
     server_name raspi.emawind.com www.raspi.emawind.com;
     root /var/www;
 
+    include includes/do_not_log.conf;
+
     location /owncloud/ {
-        #proxy_set_header Host   $http_host;
+        proxy_set_header Host   $host;
         proxy_pass https://127.0.0.1:8085;
     }
 
@@ -109,7 +113,9 @@ server {
 
     location /public/ {
         alias /home/pi/public/;
-	autoindex on;
+	#autoindex on;
+        fancyindex on;
+        fancyindex_exact_size off;
 	allow all;
     }
 
@@ -130,6 +136,11 @@ server {
     location /phptest/ {
         proxy_set_header Host $host;
         proxy_pass http://127.0.0.1:8087/;
+    }
+
+    location /upload/ {
+        proxy_set_header Host $host;
+        proxy_pass http://127.0.0.1:8089;
     }
 
     #location /microblog/ {
@@ -155,7 +166,13 @@ server {
         #deny all;
     }
 
-    location /robots.txt {}
+    location /upload {
+        include includes/upload_handler.conf;
+    }
+
+    location /uploader/ {
+        alias /home/pi/html5-file-upload/;
+    }
 
     location / {
 	return 444;

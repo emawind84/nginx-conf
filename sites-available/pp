@@ -20,6 +20,9 @@ server {
 server {
     listen 80;
     server_name kr.emawind.com www.kr.emawind.com;
+
+    include includes/do_not_log.conf;
+
     location / {
         proxy_set_header Host   $host;
         proxy_pass http://127.0.0.1:8000/;
