@@ -7,10 +7,27 @@ server {
     root /home/pi/html5-file-upload;
     index index.html;
 
+    include includes/do_not_log.conf;
+
     location / {}
 
     location /upload {
         include includes/upload_handler.conf;
     }
-
 }
+
+server {
+    listen 80;
+    server_name upload.emawind.com;
+    root /home/pi/html5-file-upload;
+    index index.html;
+
+    include includes/do_not_log.conf;
+
+    location / {}
+
+    location /upload {
+        include includes/upload_handler.conf;
+    }
+}
+
