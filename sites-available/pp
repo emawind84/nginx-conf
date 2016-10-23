@@ -14,6 +14,11 @@ server {
                 fastcgi_pass php-handler;
         }
 
+
+    location /blog/ {
+        try_files $uri $uri/ /blog/index.php?$args;
+    }
+
 }
 
 # PERSONAL WEBPAGE PRODUCTION

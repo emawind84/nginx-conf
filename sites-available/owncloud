@@ -1,6 +1,6 @@
 # OWNCLOUD
 server {
-	listen 8085 ssl;
+	listen 8085;
 	server_name 127.0.0.1;
 
 	root /var/www;

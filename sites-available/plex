@@ -4,8 +4,17 @@ server {
     listen 80;
     listen 443 ssl;
     server_name plex.emawind.com;
+    root /tmp;
+
+    ssl_certificate /etc/letsencrypt/live/plex.emawind.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/plex.emawind.com/privkey.pem;
 
     set $plex_header $http_x_plex_device;
+
+    location ~ /.well-known {
+        auth_basic          off;
+        allow all;
+    }
 
     location = / {
         if ($plex_header = ''){
