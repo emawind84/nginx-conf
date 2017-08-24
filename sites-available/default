@@ -4,8 +4,8 @@ upstream php-handler {
 }
 
 map $http_upgrade $connection_upgrade {
-    'websocket' upgrade;
-    default close;
+    default upgrade;
+    ''      '';
 }
 
 server {
@@ -31,7 +31,6 @@ server {
 
     location /notebook3/ {
         proxy_set_header Host $host;
-        #proxy_set_header Origin "";
         proxy_pass http://127.0.0.1:8889;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -105,6 +104,9 @@ server {
 
     include includes/do_not_log.conf;
     
+    limit_conn limitconnzone 40;
+    limit_req zone=limitreqzone burst=10 nodelay;
+
     location ~ /.well-known {
         allow all;
     }
